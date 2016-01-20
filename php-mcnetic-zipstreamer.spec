@@ -27,7 +27,6 @@ Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit
 # See https://github.com/McNetic/PHPZipStreamer/issues/29
 Patch1:         %{name}-warn.patch
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  php-composer(theseer/autoload)
 %if %{with_tests}
@@ -79,7 +78,6 @@ find . -name \*.rpm -exec rm {} \;
 
 
 %install
-rm -rf     %{buildroot}
 mkdir -p   %{buildroot}%{_datadir}/php
 cp -pr src %{buildroot}%{_datadir}/php/%{namespace}
 
@@ -97,24 +95,12 @@ if [ $(php -r "echo PHP_INT_SIZE;") -eq 8 ]; then
 else
   : Ignore test suite as Count64 do not support 32 bits overflow
 fi
-
-if which php70; then
-  : Run test suite with PHP 7.0 SCL
-  php70 %{_bindir}/phpunit \
-    --bootstrap %{buildroot}%{_datadir}/php/%{namespace}/autoload.php \
-    --configuration test/phpunit.xml
-fi
 %else
 : Test suite disabled
 %endif
 
 
-%clean
-rm -rf %{buildroot}
-
-
 %files
-%defattr(-,root,root,-)
 %{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc *.md

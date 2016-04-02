@@ -6,7 +6,7 @@
 #
 # Please, preserve the changelog entries
 #
-%global gh_commit    44c99c659abf4dac92882437c1da68de824ca9d0
+%global gh_commit    e57c198486242476587d04844084adbe8330581d
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
 %global gh_owner     McNetic
 %global gh_project   PHPZipStreamer
@@ -15,17 +15,14 @@
 
 Name:           php-mcnetic-zipstreamer
 Epoch:          1
-Version:        0.7
-Release:        2%{?dist}
+Version:        1.0
+Release:        1%{?dist}
 Summary:        Stream zip files without i/o overhead
 
 Group:          Development/Libraries
 License:        GPLv3+
 URL:            https://github.com/%{gh_owner}/%{gh_project}
 Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{gh_project}-%{version}-%{gh_short}.tar.gz
-
-# See https://github.com/McNetic/PHPZipStreamer/issues/29
-Patch1:         %{name}-warn.patch
 
 BuildArch:      noarch
 BuildRequires:  php-composer(theseer/autoload)
@@ -69,9 +66,6 @@ Autoloader: %{_datadir}/php/%{namespace}/autoload.php
 %prep
 %setup -q -n %{gh_project}-%{gh_commit}
 
-%patch1 -p0 -b .rpm
-find . -name \*.rpm -exec rm {} \;
-
 
 %build
 %{_bindir}/phpab -o src/autoload.php src
@@ -95,6 +89,13 @@ if [ $(php -r "echo PHP_INT_SIZE;") -eq 8 ]; then
 else
   : Ignore test suite as Count64 do not support 32 bits overflow
 fi
+
+if which php70; then
+  : Run test suite with PHP 7.0 SCL
+  php70 %{_bindir}/phpunit \
+    --bootstrap %{buildroot}%{_datadir}/php/%{namespace}/autoload.php \
+    --configuration test/phpunit.xml
+fi
 %else
 : Test suite disabled
 %endif
@@ -109,6 +110,9 @@ fi
 
 
 %changelog
+* Sat Apr  2 2016 Remi Collet <remi@fedoraproject.org> - 1:1.0.1
+- update to 1.0
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1:0.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 

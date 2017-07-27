@@ -16,7 +16,7 @@
 Name:           php-mcnetic-zipstreamer
 Epoch:          1
 Version:        1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Stream zip files without i/o overhead
 
 Group:          Development/Libraries
@@ -110,6 +110,9 @@ fi
 
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 

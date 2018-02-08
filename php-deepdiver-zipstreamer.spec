@@ -1,25 +1,25 @@
-# remirepo/fedora spec file for php-mcnetic-zipstreamer
+# php-deepdiver-zipstreamer spec file
+# forked from remirepo/fedora/php-mcnetic-zipstreamer
 #
-# Copyright (c) 2016 Remi Collet
+# Copyright (c) 2018 Remi Collet, Christian Glombek
 # License: CC-BY-SA
 # http://creativecommons.org/licenses/by-sa/4.0/
 #
 # Please, preserve the changelog entries
 #
-%global gh_commit    e57c198486242476587d04844084adbe8330581d
+
+%global gh_commit    96813f84abde82a93dbf0739005648ebd030a93c
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
-%global gh_owner     McNetic
+%global gh_owner     DeepDiver1975
 %global gh_project   PHPZipStreamer
-%global with_tests   0%{!?_without_tests:1}
+%global with_tests   1
 %global namespace    ZipStreamer
 
-Name:           php-mcnetic-zipstreamer
-Epoch:          1
-Version:        1.0
-Release:        3%{?dist}
+Name:           php-deepdiver-zipstreamer
+Version:        1.1.0
+Release:        1%{?dist}
 Summary:        Stream zip files without i/o overhead
 
-Group:          Development/Libraries
 License:        GPLv3+
 URL:            https://github.com/%{gh_owner}/%{gh_project}
 Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{gh_project}-%{version}-%{gh_short}.tar.gz
@@ -27,7 +27,7 @@ Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit
 BuildArch:      noarch
 BuildRequires:  php-composer(theseer/autoload)
 %if %{with_tests}
-BuildRequires:  php(language) >= 5.3.0
+BuildRequires:  php(language) >= 5.6.0
 BuildRequires:  php-date
 BuildRequires:  php-hash
 BuildRequires:  php-mbstring
@@ -39,8 +39,8 @@ BuildRequires:  php-pecl(pecl_http)
 %endif
 
 # From composer.json
-#      "php": ">=5.3.0"
-Requires:       php(language) >= 5.3.0
+#      "php": ">=5.6.0"
+Requires:       php(language) >= 5.6.0
 # From phpcompatinfo report for version0.7
 Requires:       php-date
 Requires:       php-hash
@@ -53,8 +53,9 @@ Recommends:     php-pecl(pecl_http)
 Requires:       php-pecl(pecl_http)
 %endif
 
-Provides:       php-composer(mcnetic/zipstreamer) = %{version}
-
+Obsoletes:      php-mcnetic-zipstreamer < 1:1.0-4
+Provides:       php-composer(mcnetic/zipstreamer) = 1:%{version}
+Provides:       php-composer(deepdiver/zipstreamer) = %{version}
 
 %description
 Simple Class to create zip files on the fly and stream directly to the
@@ -84,17 +85,9 @@ sed -e '/^ZipStreamer.php/d' -i test/*php
 if [ $(php -r "echo PHP_INT_SIZE;") -eq 8 ]; then
   : Run test suite
   %{_bindir}/phpunit \
-    --bootstrap %{buildroot}%{_datadir}/php/%{namespace}/autoload.php \
-    --configuration test/phpunit.xml
+    --bootstrap %{buildroot}%{_datadir}/php/%{namespace}/autoload.php test/lib
 else
   : Ignore test suite as Count64 do not support 32 bits overflow
-fi
-
-if which php70; then
-  : Run test suite with PHP 7.0 SCL
-  php70 %{_bindir}/phpunit \
-    --bootstrap %{buildroot}%{_datadir}/php/%{namespace}/autoload.php \
-    --configuration test/phpunit.xml
 fi
 %else
 : Test suite disabled
@@ -110,6 +103,10 @@ fi
 
 
 %changelog
+* Fri Feb 9 2018 Christian Glombek <christian.glombek@rwth-aachen.de> - 1.1.0-1
+- Update to version 1.1.0
+- Switch to DeepDiver1975's maintained fork
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1:1.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 

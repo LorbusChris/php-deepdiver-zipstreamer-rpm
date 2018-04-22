@@ -8,7 +8,7 @@
 # Please, preserve the changelog entries
 #
 
-%global gh_commit    96813f84abde82a93dbf0739005648ebd030a93c
+%global gh_commit    c8e73ca3204bd0e06abdb0bc533f073b616d6e47
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
 %global gh_owner     DeepDiver1975
 %global gh_project   PHPZipStreamer
@@ -16,7 +16,7 @@
 %global namespace    ZipStreamer
 
 Name:           php-deepdiver-zipstreamer
-Version:        1.1.0
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        Stream zip files without i/o overhead
 
@@ -103,6 +103,9 @@ fi
 
 
 %changelog
+* Sun Apr 22 2018 Christian Glombek <christian.glombek@rwth-aachen.de> - 1.1.1-1
+- Update to version 1.1.1
+
 * Fri Feb 9 2018 Christian Glombek <christian.glombek@rwth-aachen.de> - 1.1.0-1
 - Update to version 1.1.0
 - Switch to DeepDiver1975's maintained fork
